@@ -7,7 +7,7 @@ namespace WD\PlatformBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFKernel\Exception\NotFoundHttpException;
-
+use WD\PlatformBundle\Entity\Advert;
 
 
 class AdvertController extends Controller
@@ -46,13 +46,6 @@ class AdvertController extends Controller
 	
 	}
   
-  
-  
-  
-  
-  
-  
-  
 	 public function menuAction($limit)  {
     // On fixe en dur une liste ici, bien entendu par la suite
     // on la récupérera depuis la BDD !
@@ -69,7 +62,7 @@ class AdvertController extends Controller
     ));
   }
   
-	public function viewAction(){
+	public function viewAction($id){
 		$advert = new Advert;
     $advert->setContent("Recherche développeur Symfony2.");
 	
@@ -78,25 +71,32 @@ class AdvertController extends Controller
     ));
 	}
 	
-	public function addAction(Request $request)  {
-	 
-	 $antispam = $this->container->get('wd_platform.antispam');
+	public function addAction(Request $request)
+  {
+    // Création de l'entité
+    $advert = new Advert();
+    $advert->setTitle('Recherche développeur Symfony2.');
+    $advert->setAuthor('Alexandre');
+    $advert->setContent("Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…");
+    // On peut ne pas définir ni la date ni la publication,
+    // car ces attributs sont définis automatiquement dans le constructeur
 
-    // Je pars du principe que $text contient le texte d'un message quelconque
-    $text = 'ffgfgfuigqkufgquigfiuqgfuiqgsiufguiqgfuidgsvigvg<gvg<idgviudsgviugsdiuvgidusvgiudsgviugdsiuvgdsuivgiusdgviusdgviugdsiuvgsdiuvgdiusgviusdgviudsg';
-    if ($antispam->isSpam($text)) {
-      throw new \Exception('Votre message a été détecté comme spam !');
-	 
-	}
-	 
+    // On récupère l'EntityManager
+    $em = $this->getDoctrine()->getManager();
+
+    // Étape 1 : On « persiste » l'entité
+    $em->persist($advert);
+
+    // Étape 2 : On « flush » tout ce qui a été persisté avant
+    $em->flush();
+
+    // Reste de la méthode qu'on avait déjà écrit
     if ($request->isMethod('POST')) {
-
       $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
-
-      return $this->redirectToRoute('wd_platform_view', array('id' => 5));
+      return $this->redirect($this->generateUrl('wd_platform_view', array('id' => $advert->getId())));
     }
 
-    return $this->render('WDPlatformBundle:Advert:add.html.twig');
+     return $this->render('WDPlatformBundle:Advert:add.html.twig');
   }
   
     public function editAction($id,Request $request)    {
