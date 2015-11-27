@@ -9,7 +9,7 @@ class WDAntispam
 	private $locale;
 	private $minLength;
 	
-	public function __construct(\Swift_Mailer $mailer, $locale, $linLength)
+	public function __construct(\Swift_Mailer $mailer, $locale, $minLength)
 	{
 		$this->mailer 	=$mailer;
 		$this->locale	=$locale;
