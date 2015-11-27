@@ -1,0 +1,3 @@
+wd_platform:
+    resource: "@WDPlatformBundle/Resources/config/routing.yml"
+    prefix:   /platform

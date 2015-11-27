@@ -1,0 +1,26 @@
+{# src/WD/PlatformBundle/Resources/views/Advert/add.html.twig #}
+
+{% extends "WDPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Ajouter une annonce - {{ parent() }}
+{% endblock %}
+
+{% block wdplatform_body %}
+
+  <h2>Ajouter une annonce</h2>
+
+  {{ include("WDPlatformBundle:Advert:form.html.twig") }}
+
+  <p>
+    Ajoutez une nouvelle annonce.
+  </p>
+
+  {#<p>
+    <a href="{{ path('wd_platform_view', {'id': advert.id}) }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à l'annonce
+    </a>
+  </p>#}
+
+{% endblock %}

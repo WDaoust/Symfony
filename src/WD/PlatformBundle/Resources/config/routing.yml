@@ -1,0 +1,30 @@
+wd_platform_home:
+    path:     /{page}
+    defaults: { _controller: WDPlatformBundle:Advert:index, page: 1 }
+    requirements:
+        page: \d*
+
+bye_the_world:
+    pattern:     /bye-world
+    defaults: { _controller: WDPlatformBundle:Advert:index_bye }
+
+wd_platform_view:
+    path:      /advert/{id}
+    defaults:  { _controller: WDPlatformBundle:Advert:view }
+    requirements:
+        id: \d+
+wd_platform_add:
+    path:      /add
+    defaults:  { _controller: WDPlatformBundle:Advert:add }
+
+wd_platform_edit:
+    path:      /edit/{id}
+    defaults:  { _controller: WDPlatformBundle:Advert:edit }
+    requirements:
+        id: \d+
+
+wd_platform_delete:
+    path:      /delete/{id}
+    defaults:  { _controller: WDPlatformBundle:Advert:delete }
+    requirements:
+        id: \d+
