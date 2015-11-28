@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFKernel\Exception\NotFoundHttpException;
 use WD\PlatformBundle\Entity\Advert;
-use WD\PlatformBundle\Entity\Image;
+use WD\PlatformBundle\Entity\Application;
 
 
 class AdvertController extends Controller
@@ -95,21 +95,31 @@ class AdvertController extends Controller
     // car ces attributs sont définis automatiquement dans le constructeur
 
 	
-	// Création de l'entité Image
-    $image = new Image();
-    $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
-    $image->setAlt('Job de rêve');
+	// Création d'une première candidature
+    $application1 = new Application();
+    $application1->setAuthor('Marine');
+    $application1->setContent("J'ai toutes les qualités requises.");
 
-    // On lie l'image à l'annonce
-    $advert->setImage($image);
-	
+    // Création d'une deuxième candidature par exemple
+    $application2 = new Application();
+    $application2->setAuthor('Pierre');
+    $application2->setContent("Je suis très motivé.");
+
+    // On lie les candidatures à l'annonce
+    $application1->setAdvert($advert);
+    $application2->setAdvert($advert);
 
     // On récupère l'EntityManager
     $em = $this->getDoctrine()->getManager();
 
     // Étape 1 : On « persiste » l'entité
     $em->persist($advert);
-	$em->persist($image);
+
+    // Étape 1 bis : pour cette relation pas de cascade lorsqu'on persiste Advert, car la relation est
+    // définie dans l'entité Application et non Advert. On doit donc tout persister à la main ici.
+    $em->persist($application1);
+    $em->persist($application2);
+
     // Étape 2 : On « flush » tout ce qui a été persisté avant
     $em->flush();
 
