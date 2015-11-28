@@ -21,7 +21,7 @@ wd_platform_edit:
     path:      /edit/{id}
     defaults:  { _controller: WDPlatformBundle:Advert:edit }
     requirements:
-        id: \d+
+       id: \d+
 
 wd_platform_delete:
     path:      /delete/{id}
