@@ -5,7 +5,7 @@
 namespace WD\PlatformBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use WD\PlatformBundle\Entity\Advert;
 use WD\PlatformBundle\Entity\Application;
 
@@ -136,6 +136,28 @@ class AdvertController extends Controller
   }
   
     public function editAction($id,Request $request)    {
+		
+		
+		$em = $this->getDoctrine()->getManager();
+
+		// On récupère l'annonce $id
+		$advert = $em->getRepository('WDPlatformBundle:Advert')->find($id);
+
+		if (null === $advert) {
+		throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+		}
+
+		$listCategories = $em->getRepository('WDPlatformBundle:Category')->findAll();
+
+		foreach ($listCategories as $category) {
+		$advert->addCategory($category);
+		}
+
+		
+		$em->flush();
+		
+		
+		
         if($request ->isMethod('POST')){
 		  $request->getSession()->getFlashBag()->add('notice','Annonce bien modifiée.');
 		  return $this->redirectToRoute('wd_platform_view',array('id' =>5));
@@ -151,6 +173,26 @@ class AdvertController extends Controller
 	}
 	
 	public function deleteAction()    {
-         return $this->render('WDPlatformBundle:Advert:delete.html.twig', array('nom' => 'Djimoun'));
+      
+
+$em = $this->getDoctrine()->getManager();
+
+    // On récupère l'annonce $id
+    $advert = $em->getRepository('WDPlatformBundle:Advert')->find($id);
+
+    if (null === $advert) {
+      throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+    }
+
+    // On boucle sur les catégories de l'annonce pour les supprimer
+    foreach ($advert->getCategories() as $category) {
+      $advert->removeCategory($category);
+    }
+
+    
+    $em->flush();
+
+	  
+ return $this->render('WDPlatformBundle:Advert:delete.html.twig', array('nom' => 'Djimoun'));
     }
 }
