@@ -3,6 +3,8 @@
 namespace WD\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Advert
@@ -198,5 +200,16 @@ $this->date = new \Datetime();
     public function getPublished()
     {
         return $this->published;
+    }
+
+        public function setImage(\WD\PlatformBundle\Entity\Image $image = null)
+    {
+        $this->image = $image;
+    }
+
+    
+    public function getImage()
+    {
+        return $this->image;
     }
 }

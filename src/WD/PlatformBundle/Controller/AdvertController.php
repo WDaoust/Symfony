@@ -3,11 +3,11 @@
 // src/WD/PlatformBundle/Controller/AdvertController.php
 
 namespace WD\PlatformBundle\Controller;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFKernel\Exception\NotFoundHttpException;
 use WD\PlatformBundle\Entity\Advert;
+use WD\PlatformBundle\Entity\Image;
 
 
 class AdvertController extends Controller
@@ -94,12 +94,22 @@ class AdvertController extends Controller
     // On peut ne pas définir ni la date ni la publication,
     // car ces attributs sont définis automatiquement dans le constructeur
 
+	
+	// Création de l'entité Image
+    $image = new Image();
+    $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
+    $image->setAlt('Job de rêve');
+
+    // On lie l'image à l'annonce
+    $advert->setImage($image);
+	
+
     // On récupère l'EntityManager
     $em = $this->getDoctrine()->getManager();
 
     // Étape 1 : On « persiste » l'entité
     $em->persist($advert);
-
+	$em->persist($image);
     // Étape 2 : On « flush » tout ce qui a été persisté avant
     $em->flush();
 
