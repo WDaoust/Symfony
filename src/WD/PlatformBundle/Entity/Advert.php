@@ -14,7 +14,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Advert
 {
-	
+	/**
+   * @ORM\ManyToMany(targetEntity="WD\PlatformBundle\Entity\Category", cascade={"persist"})
+   */
+  private $categories;
+  
 	/**
    * @ORM\OneToOne(targetEntity="WD\PlatformBundle\Entity\Image", cascade={"persist"})
    */
@@ -211,5 +215,39 @@ $this->date = new \Datetime();
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Add category
+     *
+     * @param \WD\PlatformBundle\Entity\Category $category
+     *
+     * @return Advert
+     */
+    public function addCategory(\WD\PlatformBundle\Entity\Category $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove category
+     *
+     * @param \WD\PlatformBundle\Entity\Category $category
+     */
+    public function removeCategory(\WD\PlatformBundle\Entity\Category $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }

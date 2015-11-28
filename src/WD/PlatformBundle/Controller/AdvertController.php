@@ -63,26 +63,29 @@ class AdvertController extends Controller
   }
   
 	public function viewAction($id){
-	// On récupère le repository
-    $repository = $this->getDoctrine()
-      ->getManager()
-      ->getRepository('WDPlatformBundle:Advert')
-    ;
+	  
+		$em = $this->getDoctrine()->getManager();
 
-    // On récupère l'entité correspondante à l'id $id
-    $advert = $repository->find($id);
+		// On récupère l'annonce $id
+		$advert = $em
+			->getRepository('WDPlatformBundle:Advert')
+			->find($id);
 
-    // $advert est donc une instance de OC\PlatformBundle\Entity\Advert
-    // ou null si l'id $id  n'existe pas, d'où ce if :
-    if (null === $advert) {
-      throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
-    }
+		if (null === $advert) {
+			throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+		}
 
-    // Le render ne change pas, on passait avant un tableau, maintenant un objet
-    return $this->render('WDPlatformBundle:Advert:view.html.twig', array(
-      'advert' => $advert
-    ));
+		// On récupère la liste des candidatures de cette annonce
+		$listApplications = $em
+			->getRepository('WDPlatformBundle:Application')
+			->findBy(array('advert' => $advert));
+
+		return $this->render('WDPlatformBundle:Advert:view.html.twig', array(
+			'advert'           => $advert,
+			'listApplications' => $listApplications
+		));
 	}
+	
 	
 	public function addAction(Request $request)
   {
